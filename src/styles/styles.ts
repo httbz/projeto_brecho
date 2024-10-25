@@ -32,6 +32,22 @@ const styles = StyleSheet.create({
         marginTop: 20,
         borderRadius: 50,
     },
+    botao2: {
+        justifyContent: 'center',
+        backgroundColor: '#643085',
+        alignItems: 'center',
+        marginTop: 20,
+        borderRadius: 50,
+    },
+    botao_vermelho: {
+        justifyContent: 'center',
+        backgroundColor: '#ab2929',
+        alignItems: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 30,
+        marginTop: 20,
+        borderRadius: 50,
+    },
     texto_botao: {
         fontSize: 20,
         color: '#eef0ed',

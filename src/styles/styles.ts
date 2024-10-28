@@ -8,6 +8,35 @@ const styles = StyleSheet.create({
         //backgroundColor: '#FFFACD',
 
     },
+    descricao: {
+        fontSize: 16,
+        marginBottom: 10,
+        marginHorizontal: 15,
+        color: 'black'
+    },
+    usuario: {
+        fontSize: 16,
+        marginBottom: 10,
+        marginHorizontal: 15,
+        color: 'black'
+    },
+    preco: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        margin: 10,
+        color: 'green'
+    },
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: 'white',
+    },
+    imagem: {
+        width: '90%',
+        height: 450,
+        borderRadius: 10,
+        marginBottom: 15,
+    },
     titulo1: {
         fontSize: 40,
         fontWeight: 'bold',
@@ -25,7 +54,7 @@ const styles = StyleSheet.create({
     },
     botao: {
         justifyContent: 'center',
-        backgroundColor: '#643085',
+        backgroundColor: '#395ead',
         alignItems: 'center',
         paddingVertical: 10,
         paddingHorizontal: 30,
@@ -34,7 +63,7 @@ const styles = StyleSheet.create({
     },
     botao2: {
         justifyContent: 'center',
-        backgroundColor: '#643085',
+
         alignItems: 'center',
         marginTop: 20,
         borderRadius: 50,
@@ -132,8 +161,6 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     card: {
-        borderWidth: 2,
-        borderColor: 'black',
         borderRadius: 15,
         marginVertical: 5,
         marginHorizontal: 5,

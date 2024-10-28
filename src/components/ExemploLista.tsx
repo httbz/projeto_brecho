@@ -1,36 +1,26 @@
-
 import { useState, useEffect } from "react";
-import { Alert, Pressable, FlatList, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, FlatList, StyleSheet, Text, View, Image } from "react-native";
 
 import firestore from "@react-native-firebase/firestore";
 import { Produto } from "../types/Produto";
 import { styles } from "../styles/styles";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from '../navigation/HomeNavigator';
+import auth from "@react-native-firebase/auth";
 
 const ExemploLista = () => {
-  //cria a lista de produtos 
   const [produtos, setProdutos] = useState([] as Produto[]);
 
-  //O useEffect executa a função que for passada como parâmetro
   useEffect(() => {
-    //Buscar os dados da tabela de produtos
     const subscribe = firestore()
       .collection('produtos')
-      .onSnapshot(querySnapshot => { //A cada atualização dos dados no banco de dados é acionado o evento onSnapshot
-        /*
-        Os registros ficam em querySnapshot.docs eles são percorridos usando a função map
-        onde para cada objeto na lista será armazenado o seu valor na variável doc
-        e então executada uma função*/
+      .onSnapshot(querySnapshot => {
         const data = querySnapshot.docs.map(doc => {
-          /*Nessa função estão sendo retornados 1 objeto para cada item da lista de produtos
-          cada objeto está sendo guardado na constante data, formando um array [] */
           return {
             id: doc.id,
-            ...doc.data() //doc.data() está sendo decomposto para colocar os campo de produto lado a lado com o id
+            ...doc.data()
           }
-
         }) as Produto[];
-
-        //data contém a lista atualizada dos produtos, então é preenchido o state com data para atualizar a FlatList
         setProdutos(data);
       });
 
@@ -43,14 +33,13 @@ const ExemploLista = () => {
       .doc(id)
       .delete()
       .then(() => {
-        Alert.alert("Compra", "Compra efetuada com sucesso!")
+        Alert.alert("Excluir", "Produto excluido com sucesso!");
       })
       .catch((error) => console.log(error));
   }
 
   return (
     <View style={styles.tela}>
-
       <Text style={styles.titulo1}>Brechó Online</Text>
       <FlatList
         data={produtos}
@@ -58,8 +47,10 @@ const ExemploLista = () => {
           <ItemProduto
             numeroOrdem={info.index + 1}
             prod={info.item}
-            onDeletar={deletarProduto}/>} />
-
+            onDeletar={deletarProduto}
+          />
+        }
+      />
     </View>
   );
 }
@@ -71,61 +62,52 @@ type ItemProdutoProps = {
 }
 
 const ItemProduto = (props: ItemProdutoProps) => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const user = auth().currentUser;
 
   return (
-    <View style={styles.card}>
-      <View style={styles_local.dados_card}>
-        <Text style={{ fontSize: 30, color: 'black' }}>
-          {props.prod.nome}
-        </Text>
-        <Text style={{ fontSize: 20 }}>
-          Descrição:{props.prod.descricao.slice(0,30)}
-        </Text>
-        <Text style={{ fontSize: 20 }}>
-          Preço: R${props.prod.preco.toFixed(2)}
-        </Text>
-      </View>
+    <View style={{marginVertical: 50}}>
+      <Pressable onPress={() => navigation.navigate('TelaDetalhes', { id: props.prod.id })}>
+      {props.prod.imagemUri ? (
+        <Image source={{ uri: props.prod.imagemUri }} style={[styles.imagem, styles.shadow, { marginTop: 15, marginLeft: 20}]} />
+      ) : (
+        <Text>Imagem não disponível</Text>
+      )}
+      </Pressable>
 
-      <View
-        style={styles_local.botoes_card}>
-        <View style={[styles.botao, {backgroundColor: 'white', borderRadius: 1}]}>
-          <Pressable
-            onPress={() => props.onDeletar(props.prod.id)}>
-            <Text style={styles_local.texto_botao_card}>
-            🛒
-            </Text>
-          </Pressable>
+      <View style={[styles.card, styles.shadow]}>
+        <View style={styles_local.dados_card}>
+          <Text style={{ fontSize: 30, color: 'black', textAlign: 'center' }}>
+            {props.prod.nome}
+          </Text>
+          {/*<Text style={{ marginTop: 15, fontSize: 20, textAlign: 'center' }}>
+            Descrição: {props.prod.descricao.slice(0, 30)}
+          </Text>*/}
+          <Text style={{ marginTop: 15, fontSize: 30, textAlign: 'center', color: 'green' }}>
+            R${props.prod.preco.toFixed(2)}
+            {user && user.uid === props.prod.uId && (
+            <View style={[styles.botao2]}>
+              <Pressable onPress={() => navigation.navigate('TelaAltProduto', { id: props.prod.id })}>
+                <Text style={[styles_local.texto_botao_card, {marginLeft: 30}]}>🖊</Text>
+              </Pressable>
+            </View>
+          )}
+          </Text>
         </View>
-        
       </View>
     </View>
   );
-}
+};
 
 export default ExemploLista;
 
 const styles_local = StyleSheet.create({
-  card: {
-    borderWidth: 2,
-    borderColor: 'grey',
-    margin: 5,
-    borderRadius: 10,
-    padding: 3,
-    flexDirection: 'row',
-    backgroundColor: 'white'
-  },
   dados_card: {
     flex: 1
   },
   botoes_card: {
     flexDirection: 'row',
     justifyContent: 'space-between'
-  },
-  botao_deletar: {
-    backgroundColor: 'red',
-    width: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   botao_alterar: {
     backgroundColor: 'yellow',
@@ -135,7 +117,7 @@ const styles_local = StyleSheet.create({
   },
   texto_botao_card: {
     fontWeight: "bold",
-    fontSize: 40,
+    fontSize: 25,
     color: 'black'
   }
 });

@@ -65,7 +65,7 @@ const Exemplo3 = (props: CadastroProps) => {
       }
       return true;
   }
-  //O retorno da função é o que será construído em tela
+
   return (
 
     <ScrollView>

@@ -4,6 +4,9 @@ import TelaPrincipal from "../layouts/TelaPrincipal";
 import TelaCadastro from "../layouts/TelaCadastro";
 import TelaCadProduto from "../layouts/TelaCadProduto";
 import ExemploLista from "../components/ExemploLista";
+import TelaDetalhes from "../layouts/TelaDetalhes";
+import { RouteProp } from "@react-navigation/native";
+import TelaAltProduto from "../layouts/TelaAltProduto";
 
 type RootStackParamList = {
     TelaLogin: undefined;
@@ -11,6 +14,8 @@ type RootStackParamList = {
     TelaCadastro: undefined;
     TelaCadProduto: undefined;
     ExemploLista: undefined;
+    TelaDetalhes: { id: string };
+    TelaAltProduto: { id: string };
 };
 
 
@@ -32,6 +37,10 @@ const HomeNavigator = () => {
 
             <Stack.Screen name="ExemploLista" component={ExemploLista} />
 
+            <Stack.Screen name="TelaDetalhes" component={TelaDetalhes} />
+
+            <Stack.Screen name="TelaAltProduto" component={TelaAltProduto} />
+
         </Stack.Navigator>
     );
 }
@@ -44,10 +53,20 @@ type CadastroProps = NativeStackScreenProps<RootStackParamList, 'TelaCadastro'>;
 
 type CadProdutoProps = NativeStackScreenProps<RootStackParamList, 'TelaCadProduto'>;   
 
+type DetalhesProps = NativeStackScreenProps<RootStackParamList, 'TelaDetalhes'>; 
+
+type TelaDetalhesRouteProp = RouteProp<RootStackParamList, 'TelaDetalhes'>;
+
+type AltProdutoProps = NativeStackScreenProps<RootStackParamList, 'TelaAltProduto'>; 
+
 export default HomeNavigator;
 export type {
     LoginProps,
     PrincipalProps,
     CadastroProps,
-    CadProdutoProps
+    CadProdutoProps,
+    DetalhesProps,
+    RootStackParamList,
+    TelaDetalhesRouteProp,
+    AltProdutoProps
 };
